@@ -32,31 +32,38 @@ Preconditions:
 class Board {
 public:
 
-    Board( int givenHorizontalSize, int givenVerticalSize, GameDifficulty chosenDifficulty = MEDIUM );
+    enum GameDifficulty { EASY, MEDIUM, HARD };
+
+    Board( Board::GameDifficulty chosenDifficulty = MEDIUM );
     void generate();
     void output();
     bool click( int xCoor, int yCoor );
 
+
 private:
 
     // helper functions
-    void populate();
-    int getNumberOfMines( GameDifficulty chosenDifficulty );
+    void populate( int numberOfMines );
+    int getNumberOfMines( Board::GameDifficulty chosenDifficulty );
+    void placeMine();
+    void updateSurroundingCells( int mineXCoor, int mineYCoor );
+    bool onBoard( int xCoor, int yCoor );
+    bool isMine( int xCoor, int yCoor );
+    void updateHint( int xCoor, int yCoor );
 
     // board dimensions
     int horizontalSize, verticalSize;
 
     // difficulty
-    enum GameDifficulty { EASY, MEDIUM, HARD };
     GameDifficulty currentDifficulty;
 
     // minesweeper board
-    int mineField[][];
+    int mineField[10][10];
     // values represent whether cells are shown
-    bool truthVals[][];
+    bool truthVals[10][10];
 
 };
 
-#include "Board.cpp";
+#include "Board.cpp"
 
 #endif

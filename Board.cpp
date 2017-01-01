@@ -1,24 +1,21 @@
 #include <iostream>
-#include <experimental/random>
+#include <cstdlib>
 using namespace std;
 
-#include "Board.h";
+#include "Board.h"
 
 #ifndef _BOARD_CPP_
 #define _BOARD_CPP_
 
-Board::Board( int givenHorizontalSize, int givenVerticalSize, GameDifficulty chosenDifficulty ){
-    horizontalSize = givenHorizontalSize;
-    verticalSize = givenVerticalSize;
+Board::Board( GameDifficulty chosenDifficulty ){
     currentDifficulty = chosenDifficulty;
-    mineField[verticalSize][horizontalSize] = { 0 }
-    truthVals[verticalSize][horizontalSize] = { false };
+    horizontalSize = 10;
+    verticalSize = 10;
     generate();
-
 }
 
 void Board::generate(){
-    int numberOfMines = getNumberOfMines( chosenDifficulty );
+    int numberOfMines = getNumberOfMines( currentDifficulty );
     populate( numberOfMines );
 }
 
@@ -48,19 +45,51 @@ void Board::populate( int numberOfMines ){
 }
 
 void Board::placeMine(){
-    int mineXCoor = randint(0,horizontalSize);
-    int mineYCoor = randint(0,verticalSize);
+    int mineXCoor = rand() % horizontalSize;
+    int mineYCoor = rand() % verticalSize;
     if ( mineField[mineYCoor][mineXCoor] == 9 ){
         placeMine();
     } else {
         mineField[mineYCoor][mineXCoor] = 9;
+        updateSurroundingCells( mineXCoor, mineYCoor );
     }
+}
+
+// this function updates the hints surroudning the mine
+void Board::updateSurroundingCells( int mineXCoor, int mineYCoor ){
+    // iterate through the surrounding cells and update the numbers
+    for ( int y = -1; y < 2; y++ ){
+        for ( int x = -1; x < 2; x++ ){
+            int cellX = mineXCoor + x;
+            int cellY = mineYCoor + y;
+            // check that the cell is on the board
+            if ( onBoard( cellX, cellY ) ){
+                // make sure the cell is not a mine
+                if ( !isMine( cellX, cellY ) ){
+                    // update the hint
+                    updateHint( cellX, cellY );
+                }
+            }
+        }
+    }
+}
+
+bool Board::onBoard( int xCoor, int yCoor ){
+    return ( xCoor >= 0 && xCoor < horizontalSize && yCoor >= 0 && yCoor < verticalSize );
+}
+
+bool Board::isMine( int xCoor, int yCoor ){
+    return mineField[yCoor][xCoor] == 9;
+}
+
+void Board::updateHint( int xCoor, int yCoor ){
+    mineField[yCoor][xCoor]++;
 }
 
 void Board::output(){
     for (int yIndex = 0; yIndex < verticalSize; yIndex++ ){
         for (int xIndex = 0; xIndex < horizontalSize; xIndex++ ){
-            if (truthVals[yIndex][xIndex]){
+            if (!truthVals[yIndex][xIndex]){
                 cout << mineField[yIndex][xIndex];
             }
             else {
