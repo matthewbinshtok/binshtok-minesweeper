@@ -19,6 +19,11 @@ generate() -> generates a new minesweeper board
 output() -> outputs the current status of the boards
 click() -> simulates the user clicking on a given cell
 
+There are also helper functions, which are only called with in these member functions.
+
+Preconditions:
+- Minimum board size is 8x8.
+
 */
 
 #ifndef _BOARD_H_
@@ -27,7 +32,7 @@ click() -> simulates the user clicking on a given cell
 class Board {
 public:
 
-    Board( int givenHorizontalSize, int givenVerticalSize );
+    Board( int givenHorizontalSize, int givenVerticalSize, GameDifficulty chosenDifficulty = MEDIUM );
     void generate();
     void output();
     bool click( int xCoor, int yCoor );
@@ -36,6 +41,10 @@ private:
 
     // board dimensions
     int horizontalSize, verticalSize;
+
+    // difficulty
+    enum GameDifficulty { EASY, MEDIUM, HARD };
+    GameDifficulty currentDifficulty;
 
     // minesweeper board
     int mineField[][];
