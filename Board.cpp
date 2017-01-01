@@ -57,4 +57,18 @@ void Board::placeMine(){
     }
 }
 
+void Board::output(){
+    for (int yIndex = 0; yIndex < verticalSize; yIndex++ ){
+        for (int xIndex = 0; xIndex < horizontalSize; xIndex++ ){
+            if (truthVals[yIndex][xIndex]){
+                cout << mineField[yIndex][xIndex];
+            }
+            else {
+                cout << "X";
+            }
+        }
+        cout << endl;
+    }
+}
+
 #endif

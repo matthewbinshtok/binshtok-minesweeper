@@ -39,6 +39,10 @@ public:
 
 private:
 
+    // helper functions
+    void populate();
+    int getNumberOfMines( GameDifficulty chosenDifficulty );
+
     // board dimensions
     int horizontalSize, verticalSize;
 
