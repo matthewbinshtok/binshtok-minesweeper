@@ -15,9 +15,11 @@ int main(){
     cout << "Minesweeper Game v1.0" << endl;
     cout << "by Matthew Binshtok" << endl << endl;
 
-
+    // Create New Board
     srand( time(0) ); // This line will ensure a randomized number within Board.
     Board* currentBoard = new Board();
     currentBoard->output();
+
+    
 
 }
