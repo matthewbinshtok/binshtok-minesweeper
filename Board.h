@@ -50,6 +50,7 @@ private:
     bool onBoard( int xCoor, int yCoor );
     bool isMine( int xCoor, int yCoor );
     void updateHint( int xCoor, int yCoor );
+    int getRandomNumber( int max );
 
     // board dimensions
     int horizontalSize, verticalSize;
