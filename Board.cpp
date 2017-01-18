@@ -1,5 +1,4 @@
 #include <iostream>
-#include <ctime>
 #include <cstdlib>
 using namespace std;
 
@@ -15,10 +14,12 @@ Board::Board( GameDifficulty chosenDifficulty ){
     generate();
 }
 
+// returns a random number from 0 to max
 int Board::getRandomNumber( int max ){
 	int randomNumber;
-	srand( time(0) ); // This will ensure a really randomized number by help of time.
-    randomNumber = rand()%max+1;
+    randomNumber = rand()%max;
+    // cout << randomNumber << "," << max << endl;
+    return randomNumber;
 }
 
 void Board::generate(){
@@ -96,7 +97,7 @@ void Board::updateHint( int xCoor, int yCoor ){
 void Board::output(){
     for (int yIndex = 0; yIndex < verticalSize; yIndex++ ){
         for (int xIndex = 0; xIndex < horizontalSize; xIndex++ ){
-            if (!truthVals[yIndex][xIndex]){
+            if (truthVals[yIndex][xIndex]){
                 cout << mineField[yIndex][xIndex] << " ";
             }
             else {
