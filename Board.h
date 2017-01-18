@@ -1,3 +1,7 @@
+// Matthew Binshtok
+// Minesweeper
+// 2017
+
 #include <iostream>
 using namespace std;
 
