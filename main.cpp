@@ -16,10 +16,9 @@ int main(){
     cout << "by Matthew Binshtok" << endl << endl;
 
     // Create New Board
-    srand( time(0) ); // This line will ensure a randomized number within Board.
-    Board currentBoard = Board();
+    srand( time(0) ); // This line will ensure randomized numbers within Board.
+    Board::Coordinate firstClick = Board::Coordinate( 4,3 );
+    Board currentBoard = Board(firstClick);
     currentBoard.output();
-
-
-
+    
 }

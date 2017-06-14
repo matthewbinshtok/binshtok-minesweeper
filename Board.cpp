@@ -2,19 +2,15 @@
 // Minesweeper
 // 2017
 
-#include <iostream>
-#include <cstdlib>
-using namespace std;
-
 #include "Board.h"
 
-Board::Board( GameDifficulty chosenDifficulty ){
+Board::Board( Coordinate userClick, Board::GameDifficulty chosenDifficulty ){
     currentDifficulty = chosenDifficulty;
     horizontalSize = 10;
     verticalSize = 10;
     initializeTruthMatrix();
     initializeMineField();
-    generate();
+    generate( userClick );
 }
 
 // returns a random number from 0 to max
@@ -62,27 +58,50 @@ int Board::getNumberOfMines( GameDifficulty chosenDifficulty ){
 }
 
 void Board::generate(){
-    int numberOfMines = getNumberOfMines( currentDifficulty );
-    populate( numberOfMines );
+
 }
 
-void Board::populate( int numberOfMines ){
+void Board::generate( Coordinate userClick ){
+    int numberOfMines = getNumberOfMines( currentDifficulty );
+    populate( numberOfMines, userClick );
+}
+
+void Board::populate( int numberOfMines, Coordinate userClick ){
     while (numberOfMines != 0){
-        placeMine();
+        placeMine(userClick);
         numberOfMines--;
     }
 }
 
-void Board::placeMine(){
+void Board::placeMine( Coordinate userClick ){
+
+    // choose a random coordinate
     int mineXCoor = getRandomNumber( horizontalSize );
     int mineYCoor = getRandomNumber( verticalSize );
+    Coordinate mineCoordinate = Coordinate( mineXCoor, mineYCoor );
+
+    // make sure it is not a mine
     if ( mineField[mineYCoor][mineXCoor] == 9 ){
-        placeMine();
+        placeMine( userClick );
+    } else if ( affectsClickLocation(mineCoordinate,userClick) ) {
+        placeMine( userClick );
     } else {
         mineField[mineYCoor][mineXCoor] = 9;
-        truthVals[mineYCoor][mineXCoor] = true;
         updateSurroundingCells( mineXCoor, mineYCoor );
     }
+}
+
+bool Board::affectsClickLocation( Coordinate thisMine, Coordinate userClick ){
+    // iterate through the cells directly surrounding user click
+    for ( int y = userClick.y_coor - 1; y <= userClick.y_coor + 1; y++ ){
+        for ( int x = userClick.x_coor - 1; x <= userClick.x_coor + 1; x++ ){
+            // make sure given mine is not to be placed on any such cells
+            if (thisMine.x_coor == x && thisMine.y_coor == y){
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 // this function updates the hints surroudning the mine
@@ -114,13 +133,12 @@ bool Board::isMine( int xCoor, int yCoor ){
 
 void Board::updateHint( int xCoor, int yCoor ){
     mineField[yCoor][xCoor]++;
-    truthVals[yCoor][xCoor] = true;
 }
 
 void Board::output(){
     for (int yIndex = 0; yIndex < verticalSize; yIndex++ ){
         for (int xIndex = 0; xIndex < horizontalSize; xIndex++ ){
-            if (truthVals[yIndex][xIndex]){
+            if (!truthVals[yIndex][xIndex]){
                 cout << mineField[yIndex][xIndex] << " ";
             }
             else {
