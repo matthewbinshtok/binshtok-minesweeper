@@ -46,6 +46,10 @@ public:
 
 private:
 
+    // initializes 2D arrays
+    void initializeTruthMatrix();
+    void initializeMineField();
+
     // helper functions
     void populate( int numberOfMines );
     int getNumberOfMines( Board::GameDifficulty chosenDifficulty );
@@ -68,7 +72,5 @@ private:
     bool truthVals[10][10];
 
 };
-
-#include "Board.cpp"
 
 #endif

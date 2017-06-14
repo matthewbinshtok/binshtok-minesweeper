@@ -8,13 +8,12 @@ using namespace std;
 
 #include "Board.h"
 
-#ifndef _BOARD_CPP_
-#define _BOARD_CPP_
-
 Board::Board( GameDifficulty chosenDifficulty ){
     currentDifficulty = chosenDifficulty;
     horizontalSize = 10;
     verticalSize = 10;
+    initializeTruthMatrix();
+    initializeMineField();
     generate();
 }
 
@@ -26,9 +25,22 @@ int Board::getRandomNumber( int max ){
     return randomNumber;
 }
 
-void Board::generate(){
-    int numberOfMines = getNumberOfMines( currentDifficulty );
-    populate( numberOfMines );
+// sets whole board to 0
+void Board::initializeMineField(){
+    for (int y = 0; y < 10; y++){
+        for (int x = 0; x < 10; x++){
+            mineField[y][x] = 0;
+        }
+    }
+}
+
+// sets all of truthVals to false
+void Board::initializeTruthMatrix(){
+    for (int y = 0; y < 10; y++){
+        for (int x = 0; x < 10; x++){
+            truthVals[y][x] = false;
+        }
+    }
 }
 
 int Board::getNumberOfMines( GameDifficulty chosenDifficulty ){
@@ -49,6 +61,11 @@ int Board::getNumberOfMines( GameDifficulty chosenDifficulty ){
     return numberOfMines;
 }
 
+void Board::generate(){
+    int numberOfMines = getNumberOfMines( currentDifficulty );
+    populate( numberOfMines );
+}
+
 void Board::populate( int numberOfMines ){
     while (numberOfMines != 0){
         placeMine();
@@ -63,6 +80,7 @@ void Board::placeMine(){
         placeMine();
     } else {
         mineField[mineYCoor][mineXCoor] = 9;
+        truthVals[mineYCoor][mineXCoor] = true;
         updateSurroundingCells( mineXCoor, mineYCoor );
     }
 }
@@ -96,6 +114,7 @@ bool Board::isMine( int xCoor, int yCoor ){
 
 void Board::updateHint( int xCoor, int yCoor ){
     mineField[yCoor][xCoor]++;
+    truthVals[yCoor][xCoor] = true;
 }
 
 void Board::output(){
@@ -112,4 +131,8 @@ void Board::output(){
     }
 }
 
-#endif
+// returns false if the coordinate contains a mine
+// otherwise, uncovers the relevant cells
+/*bool Board::click( int xCoor, int yCoor ){
+
+}*/

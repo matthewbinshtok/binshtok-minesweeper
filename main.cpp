@@ -17,9 +17,9 @@ int main(){
 
     // Create New Board
     srand( time(0) ); // This line will ensure a randomized number within Board.
-    Board* currentBoard = new Board();
-    currentBoard->output();
+    Board currentBoard = Board();
+    currentBoard.output();
 
-    
+
 
 }
