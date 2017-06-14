@@ -4,6 +4,6 @@
 
 The following project is currently under construction.
 
-Check back soon for a terminal-based minesweeper game written in c++.
+Check back soon for a terminal-based minesweeper game written in C++.
 
 In the meantime, explore my github to see my completed projects.
